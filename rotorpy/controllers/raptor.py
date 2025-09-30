@@ -63,8 +63,8 @@ class FoudationPolicy(object):
         """
 
         # fetch the state estimates
-        pos  = state['x'] 
-        vel = state['v'] 
+        pos  = np.clip(state['x'], -1, 1)
+        vel = np.clip(state['v'], -1, 1)
         R = Rotation.from_quat(state['q']).as_matrix()
         omega = state['w']
 
@@ -78,17 +78,11 @@ class FoudationPolicy(object):
                 [-1, 0, 0],
                 [0, 0, 1]
             ])
-            return T_enu2nwu @ R_enu @ T_enu2nwu.T
+            return T_enu2nwu @ R_enu
         
-        pos = np.array([pos[1], -pos[0], pos[2]])
-        vel = np.array([vel[1], -vel[0], vel[2]])
-        R = enu_to_nwu_rotation(R)
-
-        omega = np.array([omega[1], -omega[0], omega[2]])
-
         observation = np.hstack((pos, R.flatten(), vel, omega, self.action_past))
 
-        action = self.policy.evaluate_step(observation)[0]
+        action = np.clip(self.policy.evaluate_step(observation)[0], -1, 1)
         # save current control action
         self.action_past = action
 
@@ -102,7 +96,8 @@ class FoudationPolicy(object):
         # action = np.array([action[0], action[1], action[2], action[3]])
 
         # denormalize based on https://github.com/rl-tools/raptor?tab=readme-ov-file#usage
-        action_rpm = (self.rotor_speed_max - self.rotor_speed_min) * (action + 1)/2 + self.rotor_speed_min
+        action_remapped = np.array([action[3], action[0], action[1], action[2]])
+        action_rpm = (self.rotor_speed_max - self.rotor_speed_min) * (action_remapped + 1)/2 + self.rotor_speed_min
         # is the unit correct for the converted rpms?
         
         # debug
