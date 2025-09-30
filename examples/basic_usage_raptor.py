@@ -82,9 +82,9 @@ Execution
 
 # Setting an initial state. This is optional, and the state representation depends on the vehicle used. 
 # Generally, vehicle objects should have an "initial_state" attribute. 
-x0 = {'x': np.array([0,0,1.1]),
+x0 = {'x': np.array([1,0,0]),
       'v': np.array([1, 0, 0]),
-      'q': np.array([0, 0, 0.70710678118, 0.70710678118]), # [i,j,k,w]
+      'q': np.array([0, 0.70710678118, 0, 0.70710678118]), # [i,j,k,w]
       'w': np.zeros(3,),
       'wind': np.array([0,0,0]),  # Since wind is handled elsewhere, this value is overwritten
       'rotor_speeds': np.array([1788.53, 1788.53, 1788.53, 1788.53])}
