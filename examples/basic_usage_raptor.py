@@ -60,9 +60,10 @@ world = World.from_file(os.path.abspath(os.path.join(os.path.dirname(__file__),'
 
 # An instance of the simulator can be generated as follows: 
 sim_instance = Environment(vehicle=Multirotor(quad_params),           # vehicle object, must be specified. 
-                           # controller=SE3Control(quad_params),        # controller object, must be specified.
-                           controller=FoudationPolicy(quad_params),
-                           trajectory=HoverTraj(x0=np.array([0, 0, 1])),         # trajectory object, must be specified.
+                        #    controller=SE3Control(quad_params),        # controller object, must be specified.
+                           controller=FoudationPolicy(quad_params),     # use RAPTOR policy
+                        #    trajectory=HoverTraj(x0=np.array([0, 0, 1])),         # trajectory object, must be specified.
+                           trajectory=ThreeDCircularTraj(center=np.array([0,0,1]), radius=np.array([1,1,0])),         # trajectory object, must be specified.
                            wind_profile=None,               # OPTIONAL: wind profile object, if none is supplied it will choose no wind. 
                            sim_rate     = 100,                        # OPTIONAL: The update frequency of the simulator in Hz. Default is 100 Hz.
                            imu          = None,                       # OPTIONAL: imu sensor object, if none is supplied it will choose a default IMU sensor.
@@ -82,9 +83,9 @@ Execution
 
 # Setting an initial state. This is optional, and the state representation depends on the vehicle used. 
 # Generally, vehicle objects should have an "initial_state" attribute. 
-x0 = {'x': np.array([1,0,0]),
-      'v': np.array([1, 0, 0]),
-      'q': np.array([0, 0.70710678118, 0, 0.70710678118]), # [i,j,k,w]
+x0 = {'x': np.array([0,0,1]),
+      'v': np.array([0, 0, 0]),
+      'q': np.array([0, 0, 0, 1]), # [i,j,k,w]
       'w': np.zeros(3,),
       'wind': np.array([0,0,0]),  # Since wind is handled elsewhere, this value is overwritten
       'rotor_speeds': np.array([1788.53, 1788.53, 1788.53, 1788.53])}
@@ -104,7 +105,7 @@ results = sim_instance.run(t_final      = 20,       # The maximum duration of th
                            animate_bool    = True,     # Boolean: determines if the animation of vehicle state will play. 
                            animate_wind    = False,    # Boolean: determines if the animation will include a scaled wind vector to indicate the local wind acting on the UAV. 
                            verbose         = True,     # Boolean: will print statistics regarding the simulation. 
-                           fname   = "raptor" # Filename is specified if you want to save the animation. The save location is rotorpy/data_out/. 
+                           fname   = None # Filename is specified if you want to save the animation. The save location is rotorpy/data_out/. 
                     )
 
 # There are booleans for if you want to plot all/some of the results, animate the multirotor, and 
