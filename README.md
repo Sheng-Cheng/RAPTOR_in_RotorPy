@@ -1,3 +1,13 @@
+This repo contains code and example to use the [RAPTOR policy](https://github.com/rl-tools/raptor). Simply install raptor with
+```
+pip install foundation-policy==1.0.1
+```
+and run the example code:
+```
+python3 /examples/basic_usage_raptor.py
+```
+Rotorpy-specific usage and commands can be found in the RotorPy documentation below.
+
 # RotorPy
 A Python-based multirotor simulation environment with aerodynamic wrenches, useful for education and research in estimation, planning, and control for UAVs.
 <p align="center"><img src="/media/double_pillar.gif" width="32%"/><img src="/media/gusty.gif" width="32%"/><img src="/media/minsnap.gif" width="32%"/></p>
